@@ -1,6 +1,5 @@
 HOSTNAME="apollo"
 USERNAME="mpare"
-USERSHELL=
 TIMEZONE="US/Eastern"
 LANGUAGE=
 DRIVE=/dev/sda
