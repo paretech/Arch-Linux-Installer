@@ -31,3 +31,9 @@ pacstrap ${MOUNT_PATH} base base-devel
 # generate file system table
 genfstab -p ${MOUNT_PATH} >> ${MOUNT_PATH}/etc/fstab
 
+chmod a+rx archroot.sh
+
+cp archroot.sh ${MOUNT_PATH}
+
+arch-chroot ${MOUNT_PATH} ./archroot.sh
+
