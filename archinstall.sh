@@ -5,6 +5,11 @@ LANGUAGE="en_US.UTF-8"
 DRIVE=/dev/sda
 MOUNT_PATH=/mnt
 
+# Test to see if operating in a chrooted environment. See 
+# http://unix.stackexchange.com/questions/14345/how-do-i-tell-im-running-in-a-chroot
+# for more information.
+if [ "$(stat -c %d:%i /)" == "$(stat -c %d:%i /proc/1/root/.)" ]; then ### Not chrooted ###
+    
 # prepare disk
 sgdisk --zap-all ${DRIVE}
 sgdisk --set-alignment=2048 ${DRIVE}
@@ -25,6 +30,8 @@ mount ${DRIVE}3 ${MOUNT_PATH}
 mkdir ${MOUNT_PATH}/boot && mount ${DRIVE}1 ${MOUNT_PATH}/boot
 swapon ${DRIVE}2
 
+exit 0
+
 # install base system
 pacstrap ${MOUNT_PATH} base base-devel
 
@@ -32,9 +39,58 @@ pacstrap ${MOUNT_PATH} base base-devel
 genfstab -p ${MOUNT_PATH} >> ${MOUNT_PATH}/etc/fstab
 
 # prepare chroot script
-chmod a+rx archroot.sh
-cp archroot.sh ${MOUNT_PATH}
+cp ${0} ${MOUNT_PATH}
 
 # change root
-arch-chroot ${MOUNT_PATH} ./archroot.sh
+arch-chroot ${MOUNT_PATH} ${0}
 
+else ### If chrooted ###
+
+# Configure Hostname
+echo ${HOSTNAME} > /etc/hostname
+sed -i "s/localhost\.localdomain/${HOSTNAME}/g" /etc/hosts
+
+# configure locale
+sed -i "s/^#\(${LANGUAGE}.*\)$/\1/" "/etc/locale.gen";
+locale-gen
+echo LANG=${LANGUAGE} > /etc/locale.conf
+export LANG=${LANGUAGE}
+cat > /etc/vconsole.conf <<VCONSOLECONF
+KEYMAP=${KEYMAP}
+FONT=${FONT}
+FONT_MAP=
+VCONSOLECONF
+
+# configure time
+ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
+echo ${TIMEZONE} >> /etc/timezone
+hwclock --systohc --utc # set hardware clock
+Install ntp
+sed -i "/^DAEMONS/ s/hwclock /!hwclock @ntpd /" /etc/rc.conf
+
+
+# Install and Configure Bootloader
+pacman --noconfirm -S syslinux gdisk
+syslinux-install_update -iam
+
+# Generate Ram Disk
+mkinitcpio -p linux
+
+pacman --noconfirm -S sudo
+cp /etc/sudoers /tmp/sudoers.edit
+sed -i "s/#\s*\(%wheel\s*ALL=(ALL)\s*ALL.*$\)/\1/" /tmp/sudoers.edit
+sed -i "s/#\s*\(%sudo\s*ALL=(ALL)\s*ALL.*$\)/\1/" /tmp/sudoers.edit
+visudo -qcsf /tmp/sudoers.edit && cat /tmp/sudoers.edit > /etc/sudoers 
+
+# change root password
+passwd
+
+# create new user
+groupadd sudo
+useradd -m -g users -G audio,lp,optical,storage,video,games,power,scanner,network,sudo,wheel -s ${USERSHELL} ${USERNAME}
+passwd ${USERNAME}
+fi
+
+umount -R ${MOUNT_PATH}
+
+reboot

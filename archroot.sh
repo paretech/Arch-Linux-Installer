@@ -1,3 +1,5 @@
+### This file is now depricated. Use archinstall.sh only ###
+
 # Configure Hostname
 echo ${HOSTNAME} > /etc/hostname
 sed -i "s/localhost\.localdomain/${HOSTNAME}/g" /etc/hosts
