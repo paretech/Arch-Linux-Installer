@@ -94,6 +94,9 @@ modprobe -a vboxguest vboxsf vboxvideo
 systemctl enable vboxservice
 mkdir /media && chgrp vboxsf /media
 
+# X Windows System
+pacman --noconfirm -S xorg-server xorg-server-utils xorg-xinit xterm ttf-dejavu awesome
+
 ### User Configuration ###
 
 # install and configure sudoers
