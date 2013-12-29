@@ -48,7 +48,7 @@ arch-chroot ${MOUNT_PATH} ${0}
 umount -R ${MOUNT_PATH}
 
 # restart into new arch env
-# reboot
+reboot
 fi ### END chroot check ###
 
 # Test to see if operating in a chrooted environment. See 
