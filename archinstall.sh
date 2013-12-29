@@ -1,3 +1,8 @@
+HOSTNAME="apollo"
+USERNAME="mpare"
+USERSHELL=
+TIMEZONE
+LANGUAGE=
 DRIVE=/dev/sda
 MOUNT_PATH=/mnt
 
