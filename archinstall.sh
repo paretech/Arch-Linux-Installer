@@ -86,8 +86,24 @@ pacman --noconfirm -S sudo
 cp /etc/sudoers /tmp/sudoers.edit
 sed -i "s/#\s*\(%wheel\s*ALL=(ALL)\s*ALL.*$\)/\1/" /tmp/sudoers.edit
 sed -i "s/#\s*\(%sudo\s*ALL=(ALL)\s*ALL.*$\)/\1/" /tmp/sudoers.edit
-visudo -qcsf /tmp/sudoers.edit && cat /tmp/sudoers.edit > /etc/sudoers 
+visudo -qcsf /tmp/sudoers.edit && cat /tmp/sudoers.edit > /etc/sudoers
 
 # change root password
 passwd
+
+# setup network
+systemctl enable dhcpcd
+
+# setup virtualbox addons
+pacman --noconfirm -S virtualbox-guest-utils
+
+echo vboxguest >> /etc/modules-load.d/virtualbox.conf
+echo vboxsf >> /etc/modules-load.d/virtualbox.conf
+echo vboxvideo >> /etc/modules-load.d/virtualbox.conf
+
+modprobe -a vboxguest vboxsf vboxvideo
+
+systemctl enable vboxservice
+
+mkdir /media && chgrp vboxsf /media
 fi ### END chroot check ###
