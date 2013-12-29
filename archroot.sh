@@ -3,7 +3,7 @@ echo ${HOSTNAME} > /etc/hostname
 sed -i "s/localhost\.localdomain/${HOSTNAME}/g" /etc/hosts
 
 # configure locale
-sed -i "s/^#\(${LANGUAGE}.*\)$/\1/" "${/etc/locale.gen}";
+sed -i "s/^#\(${LANGUAGE}.*\)$/\1/" "/etc/locale.gen";
 locale-gen
 echo LANG=${LANGUAGE} > /etc/locale.conf
 export LANG=${LANGUAGE}

@@ -1,7 +1,7 @@
 HOSTNAME="apollo"
 USERNAME="mpare"
 TIMEZONE="US/Eastern"
-LANGUAGE=
+LANGUAGE="en_US.UTF-8"
 DRIVE=/dev/sda
 MOUNT_PATH=/mnt
 
