@@ -22,12 +22,8 @@ mkfs.ext4 ${DRIVE}3
 
 # mount partitions
 mount ${DRIVE}3 ${MOUNT_PATH}
-
-mkdir ${MOUNT_PATH}/boot
-mount ${DRIVE}1 ${MOUNT_PATH}/boot
-
+mkdir ${MOUNT_PATH}/boot && mount ${DRIVE}1 ${MOUNT_PATH}/boot
 swapon ${DRIVE}2
-
 
 # install base system
 pacstrap ${MOUNT_PATH} base base-devel
@@ -35,9 +31,10 @@ pacstrap ${MOUNT_PATH} base base-devel
 # generate file system table
 genfstab -p ${MOUNT_PATH} >> ${MOUNT_PATH}/etc/fstab
 
+# prepare chroot script
 chmod a+rx archroot.sh
-
 cp archroot.sh ${MOUNT_PATH}
 
+# change root
 arch-chroot ${MOUNT_PATH} ./archroot.sh
 
