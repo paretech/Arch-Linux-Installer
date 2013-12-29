@@ -1,5 +1,5 @@
-DRIVE=${DRIVE}
-MOUNT_PATH=${MOUNT_PATH}
+DRIVE=/dev/sda
+MOUNT_PATH=/mnt
 
 # prepare disk
 sgdisk --zap-all ${DRIVE}
