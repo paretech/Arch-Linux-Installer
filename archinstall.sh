@@ -1,5 +1,5 @@
 HOSTNAME="apollo"
-USERNAME="mpare"
+USERNAME="paretech"
 TIMEZONE="US/Eastern"
 LANGUAGE="en_US.UTF-8"
 DRIVE=/dev/sda
@@ -12,7 +12,7 @@ sgdisk --clear ${DRIVE}
 
 # create partitions
 sgdisk -n 1:0:+250M -t 1:8300 -c 1:"Boot" ${DRIVE} # partition 1 (Boot)
-sgdisk -n 2:0:+2G   -t 2:8200 -c 2:"Arch" ${DRIVE} # partition 2 (Swap)
+sgdisk -n 2:0:+2G   -t 2:8200 -c 2:"Swap" ${DRIVE} # partition 2 (Swap)
 sgdisk -n 3:0:0     -t 3:8300 -c 3:"Arch" ${DRIVE} # partition 3 (Arch)
 
 # format partitions
