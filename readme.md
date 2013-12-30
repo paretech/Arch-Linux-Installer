@@ -4,5 +4,5 @@ Quick script to install Arch Linux as a VirtualBox Guest OS. This script will pa
 ## Instructions ##
 1. Boot the Arch install CD
 2. Download archinstall.sh
-    wget -O - http://tinyurl.com/aigist | tar xv
+        wget -O - http://tinyurl.com/aigist | tar xv
 3. chmod a+rx archinstall.sh
