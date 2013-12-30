@@ -6,6 +6,7 @@ TIMEZONE="US/Eastern"
 LANGUAGE="en_US.UTF-8"
 DRIVE=/dev/sda
 MOUNT_PATH=/mnt
+USERSHELL=/bin/bash
 
 # Test to see if operating in a chrooted environment. See 
 # http://unix.stackexchange.com/questions/14345/how-do-i-tell-im-running-in-a-chroot
@@ -100,12 +101,11 @@ pacman --noconfirm -S xorg-server xorg-server-utils xorg-xinit xterm ttf-dejavu 
 ### User Configuration ###
 
 # install and configure sudoers
-# http://unix.stackexchange.com/questions/79338/programatically-use-visudo-to-edit-sudoers
 pacman --noconfirm -S sudo
-#cp /etc/sudoers /tmp/sudoers.edit
-#sed -i "s/#\s*\(%wheel\s*ALL=(ALL)\s*ALL.*$\)/\1/" /tmp/sudoers.edit
-#sed -i "s/#\s*\(%sudo\s*ALL=(ALL)\s*ALL.*$\)/\1/" /tmp/sudoers.edit
-#visudo -qcsf /tmp/sudoers.edit && cat /tmp/sudoers.edit > /etc/sudoers
+cp /etc/sudoers /tmp/sudoers.edit
+sed -i "s/#\s*\(%wheel\s*ALL=(ALL)\s*ALL.*$\)/\1/" /tmp/sudoers.edit
+sed -i "s/#\s*\(%sudo\s*ALL=(ALL)\s*ALL.*$\)/\1/" /tmp/sudoers.edit
+visudo -qcsf /tmp/sudoers.edit && cat /tmp/sudoers.edit > /etc/sudoers && groupadd sudo
 
 # change root password
 passwd
