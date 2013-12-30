@@ -1,4 +1,4 @@
-#!/bin/bash -v
+#!/bin/bash
 
 HOSTNAME="apollo"
 USERNAME="paretech"
@@ -81,7 +81,8 @@ pacman --noconfirm -S syslinux gdisk
 syslinux-install_update -iam
 
 # Generate Ram Disk
-#mkinitcpio -p linux
+# Don't need this as the initial ramdisk is created during linux install
+# mkinitcpio -p linux
 
 # setup network
 systemctl enable dhcpcd
@@ -115,4 +116,8 @@ passwd
 echo "Set new user, ${USERNAME}, password:"
 useradd -m -g users -G optical,storage,power,sudo,vboxsf -s ${USERSHELL} ${USERNAME}
 passwd ${USERNAME}
+
+# new usuer config x
+echo /usr/bin/VBoxClient-all >> /home/${USERNAME}/.xinitrc
+echo "exec awesome" >> /home/${USERNAME}/.xinitrc
 fi ### END chroot check ###
