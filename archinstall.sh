@@ -55,7 +55,7 @@ fi ### END chroot check ###
 # Test to see if operating in a chrooted environment. See 
 # http://unix.stackexchange.com/questions/14345/how-do-i-tell-im-running-in-a-chroot
 # for more information.
-if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ];
+if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]; then
 
 # Configure Hostname
 echo ${HOSTNAME} > /etc/hostname
@@ -108,9 +108,11 @@ sed -i "s/#\s*\(%sudo\s*ALL=(ALL)\s*ALL.*$\)/\1/" /tmp/sudoers.edit
 visudo -qcsf /tmp/sudoers.edit && cat /tmp/sudoers.edit > /etc/sudoers && groupadd sudo
 
 # change root password
+echo "Changing Root password:"
 passwd
 
 # create new user
+echo "Set new user, ${USERNAME}, password:"
 useradd -m -g users -G optical,storage,power,sudo,vboxsf -s ${USERSHELL} ${USERNAME}
 passwd ${USERNAME}
 fi ### END chroot check ###
