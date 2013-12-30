@@ -103,10 +103,14 @@ pacman --noconfirm -S xorg-server xorg-server-utils xorg-xinit xterm ttf-dejavu 
 # install and configure sudoers
 pacman --noconfirm -S sudo
 cp /etc/sudoers /tmp/sudoers.edit
-sed -i "s/#\s*\(%wheel\s*ALL=(ALL)\s*ALL.*$\)/\1/" /tmp/sudoers.edit
+# sed -i "s/#\s*\(%wheel\s*ALL=(ALL)\s*ALL.*$\)/\1/" /tmp/sudoers.edit
 sed -i "s/#\s*\(%sudo\s*ALL=(ALL)\s*ALL.*$\)/\1/" /tmp/sudoers.edit
 visudo -qcsf /tmp/sudoers.edit && cat /tmp/sudoers.edit > /etc/sudoers && groupadd sudo
 
 # change root password
 passwd
+
+# create new user
+useradd -m -g users -G optical,storage,power,sudo,vboxsf -s ${USERSHELL} ${USERNAME}
+passwd ${USERNAME}
 fi ### END chroot check ###
